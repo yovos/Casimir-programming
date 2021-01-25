@@ -18,7 +18,18 @@ def area_triangle(base, height):
     param "base": width of the triangle base
     param "height": height of the trianble
     """
-    return 0.5*base*height
+    return base*height/2
+
+def circumference_triangle(a, b, c):
+    """
+    Calculate the circumference of a triangle.
+    
+    param a: one side of the triangle
+    param b: other side of the triangle
+    param c: third side of the triangle
+    return: circumference of the triangle
+    """
+    return a + b + c
     
 
 print("Hello world")
