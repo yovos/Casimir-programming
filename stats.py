@@ -3,6 +3,12 @@ import collections
 import matplotlib.pyplot as plt
 import numpy as np
 import ast
+import pandas as pd
+
+#######################################################################################################
+#Get filename from entered title
+#######################################################################################################
+
 
 def get_filename_from_title(title):
     File_100_Books = open("books_dictionary.txt", "r")
@@ -14,32 +20,38 @@ def get_filename_from_title(title):
         if Dictionary_100_Books[i]['Title'] == title:
             return Dictionary_100_Books[i]['Filename']
 
-#print(get_filename_from_title("War and Peace"))
-Title_entered = input("Enter title: " )
-filename = get_filename_from_title(Title_entered)
-#print(filename)
-#file = open("test.txt", "r")
-if filename is not None:
-    file = open(filename, "r")
-else:
-    print("Title was not found.")
-    exit()
-data = file.read()
-data_wout_symbols = re.sub(r'[^\w]', ' ', data) #remove symbols
-words = data_wout_symbols.split() #split text at space
+def get_list_words_from_title():
+    #print(get_filename_from_title("War and Peace"))
+    Title_entered = input("Enter title: " )
+    filename = get_filename_from_title(Title_entered)
+    #print(filename)
+    #file = open("test.txt", "r")
+    if filename is not None:
+        file = open(filename, "r")
+    else:
+        print("Title was not found.")
+        exit()
+    data = file.read()
+    data_wout_symbols = re.sub(r'[^\w]', ' ', data) #remove symbols
+    words = data_wout_symbols.split() #split text at space
+    return data_wout_symbols, words
 
 
-########################################################################
+#######################################################################################################
+#Get list of words, count how often they appear and plot rank v frequency
+#######################################################################################################
 
+data_wout_symbols, words = get_list_words_from_title()
 
-for i in range(len(words)):
+for i in range(len(words)): 
     #make all words lowercase
     words[i] = words[i].lower()
 
-#print(words)
-#print('Number of words:', len(words)) #How many words are there in total in the txt file
 Count_of_letter = collections.Counter(data_wout_symbols) #count how often each letter occurs
 Count_of_words = collections.Counter(words) #count how often each word occurs
+
+#print(words) #Print all words
+#print('Number of words:', len(words)) #How many words are there in total in the txt file
 #print(frequency_letter) #print all letters and how oftern they occur
 #print(Count_of_words.most_common(5)) #print x most common words
 #print(Count_of_words.most_common()[-1]) #print word at the end of the list
@@ -64,6 +76,6 @@ def Rank_Frequency_Plot(N):
     #plt.bar(frequency_percentage_decreasing.keys(), frequency_percentage_decreasing.values())
     plt.savefig('diagram.png')
     
-#Rank_Frequency_Plot(3000)
+Rank_Frequency_Plot(3000)
 #Rank_Frequency_Plot(len(Count_of_words))
 print(len(Count_of_words)/len(words)) #Number of unique words/Number total words
