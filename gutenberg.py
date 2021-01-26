@@ -87,19 +87,16 @@ def save_book_txt(htmltree):
     home_url = 'https://www.gutenberg.org'
     
 
-    #Get the href to .txt file
-#     xpath_txt = htmltree.xpath("//td//a[@type='text/plain*']/@href")
-#     print(xpath_txt)
-#     filelink = home_url + xpath_txt[0]
-    
+    #Get the href to .txt file    
     data = htmltree.xpath("//td/text()")
     filelink = [tc for tc in data if '.txt' in tc ]
     if not filelink:
         print('No .txt file for {}'.format(href))
 
     #Load book and author information
-    title = get_bookinfo_from_xpath(htmltree, "//a[@itemprop='creator']/text()")
+    title = get_bookinfo_from_xpath(htmltree, "//td[@itemprop='headline']/text()")
     author = get_bookinfo_from_xpath(htmltree, "//a[@itemprop='creator']/text()")
+    author = author.translate(remove_digits) #Remove digits since author's birthdate are also included
 
     #Load book .txt webpage
     booktext = urllib.request.urlopen(filelink[0]).read().decode('utf8')
@@ -182,3 +179,4 @@ def save_top100_to_txt():
         htmltree = html.fromstring(bookinfo)
         
         save_book_txt(htmltree)
+    
