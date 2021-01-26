@@ -9,6 +9,8 @@ nltk.download('punkt')
 nltk.download('stopwords')
 import ast
 
+stop_words=set(stopwords.words("english"))
+
 def get_filename_from_title(title):
     File_100_Books = open("books_dictionary.txt", "r")
     Contents_100_Books = File_100_Books.read()
@@ -31,10 +33,16 @@ if filename is not None:
 else:
     print("Title was not found.")
     exit()
+    
 data = file.read()
 data_wout_symbols = re.sub(r'[^\w]', ' ', data) #remove symbols
 words = data_wout_symbols.split() #split text at space
 sentences = tokenize.sent_tokenize(data)
+stopwords_filtered = []
+
+for wrd in tokenize.word_tokenize(data):
+    if wrd not in stop_words:
+        stopwords_filtered.append(wrd)
 
 
 ########################################################################
@@ -49,6 +57,7 @@ for i in range(len(words)):
 #print('Number of words:', len(words)) #How many words are there in total in the txt file
 Count_of_letter = collections.Counter(data_wout_symbols) #count how often each letter occurs
 Count_of_words = collections.Counter(words) #count how often each word occurs
+avg_sen_length = len(sentences)/len(words)
 
 #print(frequency_letter) #print all letters and how oftern they occur
 #print(Count_of_words.most_common(5)) #print x most common words
