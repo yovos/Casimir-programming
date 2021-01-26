@@ -36,10 +36,12 @@ fig, axes = plt.subplots()
 
 axes.set_xscale('log')
 axes.set_yscale('log')
+axes.set_xlabel(r'Rank', size=15)
+axes.set_ylabel(r'Frequency', size=15)
 axes.plot(np.arange(0,N,1), frequency_percentage_decreasing.values())
 #axes.plot(list(frequency_percentage_decreasing).index('is'), frequency_percentage_decreasing.values())
 #axes.plot(frequency_percentage_decreasing.keys(), frequency_percentage_decreasing.values())
 #plt.bar(frequency_percentage_decreasing.keys(), frequency_percentage_decreasing.values())
-plt.savefig('bardiagram.png')
+plt.savefig('diagram.png')
 
 #Do plot showing Zipfs Distribution
