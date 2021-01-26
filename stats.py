@@ -2,6 +2,11 @@ import re
 import collections
 import matplotlib.pyplot as plt
 import numpy as np
+import nltk
+from nltk import tokenize
+from nltk.corpus import stopwords
+nltk.download('punkt')
+nltk.download('stopwords')
 import ast
 import pandas as pd
 
@@ -20,6 +25,7 @@ def get_filename_from_title(title):
         if Dictionary_100_Books[i]['Title'] == title:
             return Dictionary_100_Books[i]['Filename']
 
+<<<<<<< HEAD
 def get_list_words_from_title():
     #print(get_filename_from_title("War and Peace"))
     Title_entered = input("Enter title: " )
@@ -35,6 +41,24 @@ def get_list_words_from_title():
     data_wout_symbols = re.sub(r'[^\w]', ' ', data) #remove symbols
     words = data_wout_symbols.split() #split text at space
     return data_wout_symbols, words
+=======
+
+#print(get_filename_from_title("War and Peace"))
+Title_entered = input("Enter title: " )
+filename = get_filename_from_title(Title_entered)
+#print(filename)
+
+#file = open("test.txt", "r")
+if filename is not None:
+    file = open(filename, "r")
+else:
+    print("Title was not found.")
+    exit()
+data = file.read()
+data_wout_symbols = re.sub(r'[^\w]', ' ', data) #remove symbols
+words = data_wout_symbols.split() #split text at space
+sentences = tokenize.sent_tokenize(data)
+>>>>>>> 929b8dbeddb0995ce971e1690f32d278ba94ec90
 
 
 #######################################################################################################
@@ -79,3 +103,4 @@ def Rank_Frequency_Plot(N):
 Rank_Frequency_Plot(3000)
 #Rank_Frequency_Plot(len(Count_of_words))
 print(len(Count_of_words)/len(words)) #Number of unique words/Number total words
+print('Number of sentences:', len(sentences))

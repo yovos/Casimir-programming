@@ -12,7 +12,7 @@ if not os.path.isdir('books') :
     os.mkdir('books')
     
 
-def get_bookinfo_from_xpath(htmltree, xpath, special_characters = ["\n", "\t", ",", "'", "-", ":", ";", "(", ")", ".", "?"]): 
+def get_bookinfo_from_xpath(htmltree, xpath, special_characters = ["\n", "\t", ",", "'", "-", ":", ";", "(", ")", ".", "?", '\r']): 
     """
     Returns information about the book's webpage using an htmltree,
     and an xpath to select the approriate web elemen. Removes any weird
@@ -38,7 +38,7 @@ def get_bookinfo_from_xpath(htmltree, xpath, special_characters = ["\n", "\t", "
 
 def get_info_book(htmltree):
 
-    title = get_bookinfo_from_xpath(htmltree, "//td[@itemprop='headline']/text()", ["\n", "\t"])
+    title = get_bookinfo_from_xpath(htmltree, "//td[@itemprop='headline']/text()", ["\n", "\t", "\r"])
     
     author = get_bookinfo_from_xpath(htmltree, "//a[@itemprop='creator']/text()")
     author = author.translate(remove_digits) #Remove digits since author's birthdate are also included
@@ -88,15 +88,21 @@ def save_book_txt(htmltree):
     
 
     #Get the href to .txt file
-    xpath_txt = htmltree.xpath("//td//a[@type='text/plain; charset=utf-8']/@href")
-    filelink = home_url + xpath_txt[0]
+#     xpath_txt = htmltree.xpath("//td//a[@type='text/plain*']/@href")
+#     print(xpath_txt)
+#     filelink = home_url + xpath_txt[0]
+    
+    data = htmltree.xpath("//td/text()")
+    filelink = [tc for tc in data if '.txt' in tc ]
+    if not filelink:
+        print('No .txt file for {}'.format(href))
 
     #Load book and author information
     title = get_bookinfo_from_xpath(htmltree, "//a[@itemprop='creator']/text()")
     author = get_bookinfo_from_xpath(htmltree, "//a[@itemprop='creator']/text()")
 
     #Load book .txt webpage
-    booktext = urllib.request.urlopen(filelink).read().decode('utf8')
+    booktext = urllib.request.urlopen(filelink[0]).read().decode('utf8')
     
     #Define the filename as title-author.txt
     filename = title.lower() + " " + author.lower()
@@ -112,6 +118,11 @@ def save_book_txt(htmltree):
     
 
 def list_book_info():
+    """
+    Lists title, author, year author, genre and filename of each book in the Gutenberg top 100 downloaded. 
+    
+    returns pandas dataframe with the info.
+    """
     # #Homepage of gutenberg project
     home_url = 'https://www.gutenberg.org'
     bookinfo_list = []
@@ -140,4 +151,34 @@ def list_book_info():
         
         bookinfo_list.append(get_info_book(htmltree))
         
-    return bookinfo_list
+    return pd.DataFrame(bookinfo_list)
+        
+        
+def save_top100_to_txt():
+    # #Homepage of gutenberg project
+    home_url = 'https://www.gutenberg.org'
+    bookinfo_list = []
+
+    # Load all urls of the top 100 downloaded books from gutenberg
+    url = 'https://www.gutenberg.org/browse/scores/top'
+    
+    #Request the url and decode it to text
+    text = urllib.request.urlopen(url).read().decode('utf8')
+
+    #Generate a html tree to filter the proper hrefs
+    htmltree = html.fromstring(text)
+
+    #filter the top 100 books hrefs from the page's first ordered list
+    hrefs = htmltree.xpath("/html/body/div/div[1]/ol[1]//a/@href")
+
+    #Loop through each book's page to get the .txt file and book info
+    for href in hrefs:
+        
+        #Create url of bookpage
+        bookinfo_url = home_url + href
+
+        #Parse the bookinfo html page
+        bookinfo = urllib.request.urlopen(bookinfo_url).read().decode('utf8')
+        htmltree = html.fromstring(bookinfo)
+        
+        save_book_txt(htmltree)
