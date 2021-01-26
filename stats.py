@@ -2,11 +2,11 @@ import re
 import collections
 import matplotlib.pyplot as plt
 import numpy as np
-import nltk
-from nltk import tokenize
-from nltk.corpus import stopwords
-nltk.download('punkt')
-nltk.download('stopwords')
+#import nltk
+#from nltk import tokenize
+#from nltk.corpus import stopwords
+#nltk.download('punkt')
+#nltk.download('stopwords')
 import ast
 import pandas as pd
 
@@ -46,14 +46,14 @@ def get_list_words_from_title():
 #Get list of words, count how often they appear and plot rank v frequency
 #######################################################################################################
 
-data_wout_symbols, words = get_list_words_from_title()
+#BEGIN data_wout_symbols, words = get_list_words_from_title()
 
-for i in range(len(words)): 
-    #make all words lowercase
-    words[i] = words[i].lower()
+# for i in range(len(words)): 
+#     #make all words lowercase
+#     words[i] = words[i].lower()
 
-Count_of_letter = collections.Counter(data_wout_symbols) #count how often each letter occurs
-Count_of_words = collections.Counter(words) #count how often each word occurs
+# Count_of_letter = collections.Counter(data_wout_symbols) #count how often each letter occurs
+#END Count_of_words = collections.Counter(words) #count how often each word occurs
 
 #print(words) #Print all words
 #print('Number of words:', len(words)) #How many words are there in total in the txt file
@@ -81,7 +81,14 @@ def Rank_Frequency_Plot(N):
     #plt.bar(frequency_percentage_decreasing.keys(), frequency_percentage_decreasing.values())
     plt.savefig('diagram.png')
     
-Rank_Frequency_Plot(3000)
+#!!!Rank_Frequency_Plot(3000)
 #Rank_Frequency_Plot(len(Count_of_words))
-print(len(Count_of_words)/len(words)) #Number of unique words/Number total words
-print('Number of sentences:', len(sentences))
+#print(len(Count_of_words)/len(words)) #Number of unique words/Number total words
+#print('Number of sentences:', len(sentences))
+
+
+Books_dataframe = pd.read_csv("Books_Dataframe.csv") 
+#print(Books_dataframe)
+for i in range(100):
+    print(Books_dataframe.iloc[i,5])
+#Add all the numbers to the existing dataframe by first storing them in lists and then adding the lists as new columns to dataframe
