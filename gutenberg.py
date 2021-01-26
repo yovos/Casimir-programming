@@ -45,7 +45,13 @@ def get_info_book(htmltree):
     
     year = get_bookinfo_from_xpath(htmltree, "//a[@itemprop='creator']/text()", ["\n", "\t"])
     year = re.findall(r'\b\d+\b', year) #Extract digits to get the author's years
-    year = year[0] + '-' + year[1]
+    if not year:
+        year = 'unknown'
+    else:
+        try:
+            year = year[0] + '-' + year[1]
+        except IndexError:
+            year = year[0]
 
     subjects = htmltree.xpath("//td[@property='dcterms:subject']/a/text()")
     subjects = [s.replace('\n', '') for s in subjects]
@@ -102,7 +108,8 @@ def save_book_txt(htmltree):
     n = txt_file.write(booktext)
     txt_file.close()
 
-
+    
+    
 
 def list_book_info():
     # #Homepage of gutenberg project
@@ -111,7 +118,7 @@ def list_book_info():
 
     # Load all urls of the top 100 downloaded books from gutenberg
     url = 'https://www.gutenberg.org/browse/scores/top'
-
+    
     #Request the url and decode it to text
     text = urllib.request.urlopen(url).read().decode('utf8')
 
@@ -123,7 +130,7 @@ def list_book_info():
 
     #Loop through each book's page to get the .txt file and book info
     for href in hrefs:
-
+        
         #Create url of bookpage
         bookinfo_url = home_url + href
 
@@ -131,6 +138,6 @@ def list_book_info():
         bookinfo = urllib.request.urlopen(bookinfo_url).read().decode('utf8')
         htmltree = html.fromstring(bookinfo)
         
-        bookinfo_list = bookinfo_list.append(get_info_book(htmltree))
+        bookinfo_list.append(get_info_book(htmltree))
         
-    return list_book_info
+    return bookinfo_list
