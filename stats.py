@@ -2,7 +2,15 @@ import re
 import collections
 import matplotlib.pyplot as plt
 import numpy as np
+import nltk
+from nltk import tokenize
+from nltk.corpus import stopwords
+nltk.download('punkt')
+nltk.download('stopwords')
 
+
+stop_words=set(stopwords.words("english"))
+print(stop_words)
 
 #file = open("test.txt", "r")
 file = open("war_and_peace.txt", "r")
@@ -10,6 +18,7 @@ file = open("war_and_peace.txt", "r")
 data = file.read()
 data_wout_symbols = re.sub(r'[^\w]', ' ', data) #remove symbols
 words = data_wout_symbols.split() #split text at space
+sentences = tokenize.sent_tokenize(data)
 
 for i in range(len(words)):
     #make all words lowercase
@@ -17,6 +26,8 @@ for i in range(len(words)):
 
 #print(words)
 print('Number of words:', len(words)) #How many words are there in total in the txt file
+print('Number of sentences:', len(sentences))
+print('Average sentence length:', len(words)/len(sentences))
 frequency_letter = collections.Counter(data_wout_symbols) #count how often each letter occurs
 frequency_words = collections.Counter(words) #count how often each word occurs
 #print(frequency_letter) #print all letters and how oftern they occur
