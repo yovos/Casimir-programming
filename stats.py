@@ -2,12 +2,18 @@ import re
 import collections
 import matplotlib.pyplot as plt
 import numpy as np
-import nltk
-from nltk import tokenize
-from nltk.corpus import stopwords
-nltk.download('punkt')
-nltk.download('stopwords')
+#import nltk
+#from nltk import tokenize
+#from nltk.corpus import stopwords
+#nltk.download('punkt')
+#nltk.download('stopwords')
 import ast
+import pandas as pd
+
+#######################################################################################################
+#Get filename from entered title
+#######################################################################################################
+
 
 stop_words=set(stopwords.words("english"))
 
@@ -38,22 +44,38 @@ data = file.read()
 data_wout_symbols = re.sub(r'[^\w]', ' ', data) #remove symbols
 words = data_wout_symbols.split() #split text at space
 sentences = tokenize.sent_tokenize(data)
-stopwords_filtered = []
+        
+def get_list_words_from_title():
+    #print(get_filename_from_title("War and Peace"))
+    Title_entered = input("Enter title: " )
+    filename = get_filename_from_title(Title_entered)
+    #print(filename)
+    #file = open("test.txt", "r")
+    if filename is not None:
+        file = open(filename, "r")
+    else:
+        print("Title was not found.")
+        exit()
+    data = file.read()
+    data_wout_symbols = re.sub(r'[^\w]', ' ', data) #remove symbols
+    words = data_wout_symbols.split() #split text at space
+    return data_wout_symbols, words
 
-for wrd in tokenize.word_tokenize(data):
-    if wrd not in stop_words:
-        stopwords_filtered.append(wrd)
 
+#######################################################################################################
+#Get list of words, count how often they appear and plot rank v frequency
+#######################################################################################################
 
-########################################################################
+#BEGIN data_wout_symbols, words = get_list_words_from_title()
 
+# for i in range(len(words)): 
+#     #make all words lowercase
+#     words[i] = words[i].lower()
 
-for i in range(len(words)):
-    #make all words lowercase
-    words[i] = words[i].lower()
+# Count_of_letter = collections.Counter(data_wout_symbols) #count how often each letter occurs
+#END Count_of_words = collections.Counter(words) #count how often each word occurs
 
-#print(words)
-
+#print(words) #Print all words
 #print('Number of words:', len(words)) #How many words are there in total in the txt file
 Count_of_letter = collections.Counter(data_wout_symbols) #count how often each letter occurs
 Count_of_words = collections.Counter(words) #count how often each word occurs
@@ -83,7 +105,14 @@ def Rank_Frequency_Plot(N):
     #plt.bar(frequency_percentage_decreasing.keys(), frequency_percentage_decreasing.values())
     plt.savefig('diagram.png')
     
-#Rank_Frequency_Plot(3000)
+#!!!Rank_Frequency_Plot(3000)
 #Rank_Frequency_Plot(len(Count_of_words))
-print(len(Count_of_words)/len(words)) #Number of unique words/Number total words
-print('Number of sentences:', len(sentences))
+#print(len(Count_of_words)/len(words)) #Number of unique words/Number total words
+#print('Number of sentences:', len(sentences))
+
+
+Books_dataframe = pd.read_csv("Books_Dataframe.csv") 
+#print(Books_dataframe)
+for i in range(100):
+    print(Books_dataframe.iloc[i,5])
+#Add all the numbers to the existing dataframe by first storing them in lists and then adding the lists as new columns to dataframe
