@@ -25,7 +25,6 @@ def get_filename_from_title(title):
         if Dictionary_100_Books[i]['Title'] == title:
             return Dictionary_100_Books[i]['Filename']
 
-<<<<<<< HEAD
 def get_list_words_from_title():
     #print(get_filename_from_title("War and Peace"))
     Title_entered = input("Enter title: " )
@@ -41,24 +40,6 @@ def get_list_words_from_title():
     data_wout_symbols = re.sub(r'[^\w]', ' ', data) #remove symbols
     words = data_wout_symbols.split() #split text at space
     return data_wout_symbols, words
-=======
-
-#print(get_filename_from_title("War and Peace"))
-Title_entered = input("Enter title: " )
-filename = get_filename_from_title(Title_entered)
-#print(filename)
-
-#file = open("test.txt", "r")
-if filename is not None:
-    file = open(filename, "r")
-else:
-    print("Title was not found.")
-    exit()
-data = file.read()
-data_wout_symbols = re.sub(r'[^\w]', ' ', data) #remove symbols
-words = data_wout_symbols.split() #split text at space
-sentences = tokenize.sent_tokenize(data)
->>>>>>> 929b8dbeddb0995ce971e1690f32d278ba94ec90
 
 
 #######################################################################################################
