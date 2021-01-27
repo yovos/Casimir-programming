@@ -153,8 +153,6 @@ def list_book_info(save=False):
         bookdict = get_info_book(htmltree)
         
         bookinfo_list.append(bookdict)
-        
-        save_book_txt(htmltree)
 
         if save:
             filename_book = bookdict["Filename"]
