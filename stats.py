@@ -16,7 +16,7 @@ import os.path
 #######################################################################################################
 
 
-stop_words=set(stopwords.words("english"))
+#stop_words=set(stopwords.words("english"))
 
 def get_filename_from_title(title):
     File_100_Books = open("books_dictionary.txt", "r")
@@ -28,23 +28,19 @@ def get_filename_from_title(title):
         if Dictionary_100_Books[i]['Title'] == title:
             return Dictionary_100_Books[i]['Filename']
 
-
-#print(get_filename_from_title("War and Peace"))
-Title_entered = input("Enter title: " )
-filename = get_filename_from_title(Title_entered)
-#print(filename)
-
+#BEGIN
 #file = open("test.txt", "r")
-if filename is not None:
-    file = open(filename, "r")
-else:
-    print("Title was not found.")
-    exit()
+# if filename is not None:
+#     file = open(filename, "r")
+# else:
+#     print("Title was not found.")
+#     exit()
     
-data = file.read()
-data_wout_symbols = re.sub(r'[^\w]', ' ', data) #remove symbols
-words = data_wout_symbols.split() #split text at space
-sentences = tokenize.sent_tokenize(data)
+# data = file.read()
+# data_wout_symbols = re.sub(r'[^\w]', ' ', data) #remove symbols
+# words = data_wout_symbols.split() #split text at space
+#sentences = tokenize.sent_tokenize(data)
+#END
         
 def get_list_words_from_title():
     #print(get_filename_from_title("War and Peace"))
@@ -85,16 +81,16 @@ def get_list_words_from_filename(filename):
 
 #print(words) #Print all words
 #print('Number of words:', len(words)) #How many words are there in total in the txt file
-Count_of_letter = collections.Counter(data_wout_symbols) #count how often each letter occurs
-Count_of_words = collections.Counter(words) #count how often each word occurs
-avg_sen_length = len(sentences)/len(words)
+#!Count_of_letter = collections.Counter(data_wout_symbols) #count how often each letter occurs
+#!Count_of_words = collections.Counter(words) #count how often each word occurs
+#!avg_sen_length = len(sentences)/len(words)
 
 #print(frequency_letter) #print all letters and how oftern they occur
 #print(Count_of_words.most_common(5)) #print x most common words
 #print(Count_of_words.most_common()[-1]) #print word at the end of the list
 #print(Count_of_words['war'],Count_of_words['peace']) #print frequency of given word
 
-def Rank_Frequency_Plot(N):
+def Rank_Frequency_Plot(Count_of_words,N):
     """
     Plot of rank v frequency of N most common words in text
     """
@@ -102,7 +98,6 @@ def Rank_Frequency_Plot(N):
     Frequency_common_words = [(i, Count_of_words[i] / len(words) * 100.0) for i,count in Count_of_words.most_common(N)] #Compute with what percentage the words occur
     Frequency_common_words_decreasing = collections.OrderedDict(Frequency_common_words) #Make ordered dictionary of most common words and with which percentage they occur
     #print(frequency_percentage[:5]) #print the five most common words with percentage 
-
     #fig, axes = plt.subplots()
     axes.set_xscale('log')
     axes.set_yscale('log')
@@ -145,7 +140,7 @@ for i in range(100):
         #most_common_letters.append(Count_of_letter.most_common(2))
         most_common_words.append(list(collections.OrderedDict(Count_of_words.most_common(2)).keys()))
         most_diverse.append(len(Count_of_words)/len(words))
-        #Rank_Frequency_Plot(1000)
+        Rank_Frequency_Plot(Count_of_words,500)
     else:
         list_number_of_words.append("File not found")
         most_common_words.append("File not found")
@@ -158,4 +153,4 @@ Books_dataframe['Ratio of Unique and Total Words'] = most_diverse
 Books_dataframe.to_csv(r'Books_w_stats.csv', index = False)
 max_index = pd.to_numeric(Books_dataframe['Ratio of Unique and Total Words']).idxmax()
 print(Books_dataframe.iloc[max_index,1])
-#plt.savefig('diagram.png')
+plt.savefig('diagram.png')

@@ -179,10 +179,7 @@ def save_top100_to_txt():
         htmltree = html.fromstring(bookinfo)
         
         save_book_txt(htmltree)
-<<<<<<< HEAD
+
         
 #df = list_book_info()       
 #df.to_csv(r'Books_Dataframe.csv')
-=======
-    
->>>>>>> 6c94221ec03b873678b5466da28613c30a9be93b
