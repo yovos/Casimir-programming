@@ -153,10 +153,12 @@ def list_book_info(save=False):
         bookdict = get_info_book(htmltree)
         
         bookinfo_list.append(bookdict)
-        
+
         if save:
             filename_book = bookdict["Filename"]
             save_book_txt(htmltree, filename_book)
         
     return pd.DataFrame(bookinfo_list)
-    
+
+#df = list_book_info()       
+#df.to_csv(r'Books_Dataframe.csv')
